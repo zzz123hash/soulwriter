@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "AI-powered novel writing assistant",
   "main": "index.js",
+  "bin": {
+    "sw": "./cli/sw.js"
+  },
   "scripts": {
     "start": "node index.js"
   },

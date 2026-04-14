@@ -1,0 +1,99 @@
+#!/bin/bash
+
+API="${SW_API:-http://localhost:3000}"
+CMD=$1
+shift
+
+json_get() {
+  echo "$1" | sed 's/.*"\('$2'\)":"\([^"]*\)".*/\2/' | head -1
+}
+
+case $CMD in
+  list)
+    echo "📚 书架:"
+    DATA=$(curl -s "$API/api/books")
+    echo "$DATA" | grep -o '"title":"[^"]*"' | while read t; do echo "  ${t//\"title\":\"/}📖 "; done
+    echo ""
+    echo "$DATA" | grep -o '"book_id":"[^"]*"' | wc -l | xargs echo "共 $# 本书"
+    ;;
+  new)
+    TITLE="$*"
+    if [ -z "$TITLE" ]; then
+      echo "用法: sw new <书名>"
+      exit 1
+    fi
+    DATA=$(curl -s -X POST "$API/api/books" -H "Content-Type: application/json" -d "{\"title\":\"$TITLE\"}")
+    if echo "$DATA" | grep -q '"success":true'; then
+      ID=$(echo "$DATA" | grep -o '"book_id":"[^"]*"' | head -1)
+      echo "✅ 创建成功: $TITLE"
+      echo "   ID: ${ID//\"book_id\":\"/}"
+    else
+      echo "❌ 创建失败"
+    fi
+    ;;
+  open)
+    DATA=$(curl -s "$API/api/books/$1")
+    if echo "$DATA" | grep -q '"success":true'; then
+      echo "$DATA" | grep -o '"title":"[^"]*"' | head -1 | sed 's/"title":"/📖 /'
+    else
+      echo "❌ 书籍不存在"
+    fi
+    ;;
+  delete)
+    DATA=$(curl -s -X DELETE "$API/api/books/$1")
+    if echo "$DATA" | grep -q '"success":true'; then
+      echo "✅ 已删除"
+    else
+      echo "❌ 删除失败"
+    fi
+    ;;
+  chapters)
+    if [ -z "$1" ]; then
+      echo "用法: sw chapters <bookId>"
+      exit 1
+    fi
+    echo "📑 章节:"
+    DATA=$(curl -s "$API/api/books/$1/chapters")
+    echo "$DATA" | grep -o '"title":"[^"]*"' | while read t; do echo "  ${t//\"title\":\"/}"; done
+    ;;
+  chapter)
+    if [ "$1" = "new" ]; then
+      BOOK=$2; shift 2; TITLE="$*"
+      if [ -z "$BOOK" ] || [ -z "$TITLE" ]; then
+        echo "用法: sw chapter new <bookId> <标题>"
+        exit 1
+      fi
+      DATA=$(curl -s -X POST "$API/api/books/$BOOK/chapters" -H "Content-Type: application/json" -d "{\"title\":\"$TITLE\"}")
+      if echo "$DATA" | grep -q '"success":true'; then
+        echo "✅ 章节创建成功: $TITLE"
+      else
+        echo "❌ 创建失败"
+      fi
+    fi
+    ;;
+  help|--help|-h|*)
+    cat << EOF
+SoulWriter CLI - AI 小说写作助手
+
+用法:
+  sw <命令> [参数]
+
+书籍:
+  sw list                  列出所有书籍
+  sw new <书名>            创建新书籍
+  sw open <bookId>         查看书籍信息
+  sw delete <bookId>        删除书籍
+
+章节:
+  sw chapters <bookId>     列出章节
+  sw chapter new <bookId> <标题>  创建章节
+
+示例:
+  sw new "我的小说"        创建新书
+  sw list                  查看书架
+  sw chapters book_xxx     查看书的章节
+
+API: $API
+EOF
+    ;;
+esac
