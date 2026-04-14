@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoulWriter</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 路由内容将在这里渲染 -->
+  </div>
+  
+  <!-- 模板 -->
+  <template id="tpl-home">
+    <div class="page page-home">
+      <header class="header">
+        <h1>📚 SoulWriter</h1>
+        <button class="btn btn-primary" id="btn-new-book">+ 新建书籍</button>
+      </header>
+      <div class="bookshelf" id="bookshelf">
+        <!-- 书籍列表 -->
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-book">
+    <div class="page page-book">
+      <header class="header">
+        <button class="btn btn-text" id="btn-back">← 返回</button>
+        <h1 id="book-title">书籍名</h1>
+        <button class="btn btn-primary" id="btn-new-chapter">+ 章节</button>
+      </header>
+      <div class="chapter-list" id="chapter-list">
+        <!-- 章节列表 -->
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-writer">
+    <div class="page page-writer">
+      <header class="header">
+        <button class="btn btn-text" id="btn-back">← 返回</button>
+        <h1 id="chapter-title">章节名</h1>
+        <button class="btn btn-primary" id="btn-save">保存</button>
+      </header>
+      <div class="writer-area">
+        <textarea id="editor" placeholder="开始写作..."></textarea>
+      </div>
+    </div>
+  </template>
+
+  <!-- 弹窗 -->
+  <template id="tpl-modal-new-book">
+    <div class="modal">
+      <div class="modal-content">
+        <h2>新建书籍</h2>
+        <div class="form-group">
+          <label>书名</label>
+          <input type="text" id="input-title" placeholder="输入书名">
+        </div>
+        <div class="form-group">
+          <label>作者</label>
+          <input type="text" id="input-author" placeholder="作者名">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="btn-cancel">取消</button>
+          <button class="btn btn-primary" id="btn-create">创建</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="js/api.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
