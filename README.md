@@ -1,95 +1,101 @@
 # SoulWriter
 
-AI-powered novel writing assistant with modular architecture.
+[English](README_en.md) | [中文](README.md)
 
-## Architecture
+---
+
+## 🌐 多语言
+
+| 语言 | 文件 |
+|-----|------|
+| English | [README_en.md](README_en.md) |
+| 简体中文 | [README.md](README.md) |
+
+---
+
+# SoulWriter 中文文档
+
+AI 驱动的智能小说写作助手。
+
+## 系统架构
 
 ```
 SoulWriter
-├── core/              # 🔒 Core (stable, never changes)
-│   ├── index.js       # Entry point
-│   ├── db.js         # Database layer
-│   ├── api.js        # API utilities
-│   ├── events.js     # Event system (feedback control)
-│   └── static.js     # Static file server
+├── core/           # 🔒 核心层（稳定不变）
+│   ├── index.js    # 入口
+│   ├── db.js      # 数据库
+│   ├── api.js     # API 工具
+│   ├── events.js  # 事件系统（反馈控制）
+│   └── static.js  # 静态文件
 │
-├── plugins/           # 🔌 Plugins (load on demand)
-│   ├── ai-models/    # AI model plugins
-│   ├── features/    # Feature plugins
-│   └── export/       # Export plugins
+├── plugins/        # 🔌 插件层（按需加载）
+│   ├── ai-models/ # AI 模型
+│   ├── features/  # 功能插件
+│   └── export/    # 导出插件
 │
-├── web/               # 🌐 Web UI
+├── web/            # 🌐 网页前端
 │   ├── index.html
 │   ├── css/
 │   └── js/
 │
-└── cli/               # 💻 CLI tool
+└── cli/           # 💻 命令行
 ```
 
-## Features
-
-- **Books & Chapters**: Full CRUD operations
-- **Modular Design**: Core + Plugin architecture
-- **Multiple Interfaces**: Web UI, CLI support
-- **SQLite Database**: Single file, portable
-- **Event System**: Feedback control mechanism
-
-## Quick Start
+## 快速开始
 
 ```bash
-# Install dependencies
+# 安装依赖
 npm install
 
-# Start server
+# 启动服务
 npm start
 
-# Access Web UI
+# 访问网页
 open http://localhost:3000
 ```
 
-## API
+## API 接口
 
-### Books
+### 书籍
 
-```
-GET    /api/books              # List all books
-POST   /api/books             # Create book
-GET    /api/books/:id         # Get book
-PUT    /api/books/:id         # Update book
-DELETE /api/books/:id         # Delete book
-```
+| 方法 | 路径 | 说明 |
+|-----|------|------|
+| GET | /api/books | 列出书籍 |
+| POST | /api/books | 创建书籍 |
+| GET | /api/books/:id | 获取书籍 |
+| PUT | /api/books/:id | 更新书籍 |
+| DELETE | /api/books/:id | 删除书籍 |
 
-### Chapters
+### 章节
 
-```
-GET    /api/books/:id/chapters    # List chapters
-POST   /api/books/:id/chapters    # Create chapter
-PUT    /api/chapters/:id           # Update chapter
-DELETE /api/chapters/:id           # Delete chapter
-```
+| 方法 | 路径 | 说明 |
+|-----|------|------|
+| GET | /api/books/:id/chapters | 列出章节 |
+| POST | /api/books/:id/chapters | 创建章节 |
+| PUT | /api/chapters/:id | 更新章节 |
+| DELETE | /api/chapters/:id | 删除章节 |
 
-## CLI
+## CLI 命令行
 
 ```bash
-sw list                    # List books
-sw new "Book Title"       # Create book
-sw chapters <bookId>      # List chapters
-sw chapter new <bookId> <title>  # Create chapter
+sw list                    # 书架
+sw new "书名"            # 创建书籍
+sw chapters <bookId>     # 章节列表
+sw chapter new <bookId> <标题>  # 创建章节
 ```
 
-## Development
+## 开发
 
-### Adding a Plugin
+### 添加插件
 
 ```javascript
 // plugins/my-plugin/index.js
 module.exports = {
   name: 'my-plugin',
   version: '1.0.0',
-  apiVersion: '1.0',
   
   onInit(core) {
-    // Register routes, hooks, etc.
+    // 注册路由、钩子等
   },
   
   routes: [
