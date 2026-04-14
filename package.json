@@ -1,0 +1,12 @@
+{
+  "name": "soulwriter",
+  "version": "1.0.0",
+  "description": "AI-powered novel writing assistant",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": ["novel", "writing", "ai"],
+  "author": "",
+  "license": "MIT"
+}
